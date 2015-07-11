@@ -1189,6 +1189,7 @@ int mdss_mdp_cmd_set_autorefresh_mode(struct mdss_mdp_ctl *ctl,
 		int frame_cnt);
 int mdss_mdp_ctl_cmd_autorefresh_enable(struct mdss_mdp_ctl *ctl,
 		int frame_cnt);
+int mdss_mdp_user_pcc_config(struct mdp_pcc_cfg_data *config);
 
 #if defined(CONFIG_FB_MSM_MDSS_SAMSUNG)
 void samsung_timing_engine_control(int enable);
