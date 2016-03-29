@@ -222,7 +222,6 @@ static int mmc_host_suspend(struct device *dev)
 		spin_unlock_irqrestore(&host->clk_lock, flags);
 		mmc_set_ios(host);
 	}
-
 out:
 	spin_lock_irqsave(&host->clk_lock, flags);
 	if (ret)
