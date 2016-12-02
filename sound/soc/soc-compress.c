@@ -801,6 +801,14 @@ int soc_new_compress(struct snd_soc_pcm_runtime *rtd, int num)
 			rtd->dai_link->stream_name, codec_dai->name, num);
 
 	if (codec_dai->driver->playback.channels_min)
+		playback = 1;
+	if (codec_dai->driver->capture.channels_min)
+		capture = 1;
+
+	capture = capture && cpu_dai->driver->capture.channels_min;
+	playback = playback && cpu_dai->driver->playback.channels_min;
+
+	if(playback)
 		direction = SND_COMPRESS_PLAYBACK;
 	else if (codec_dai->driver->capture.channels_min)
 		direction = SND_COMPRESS_CAPTURE;
