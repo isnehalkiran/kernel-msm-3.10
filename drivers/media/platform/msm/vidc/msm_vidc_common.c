@@ -81,6 +81,8 @@ const char *const mpeg_video_vidc_extradata[] = {
 	"Extradata output crop",
 	"Extradata display colour SEI",
 	"Extradata light level SEI",
+	"Extradata display VUI",
+	"Extradata vpx color space",
 };
 
 struct getprop_buf {
@@ -121,16 +123,6 @@ int msm_comm_g_ctrl(struct msm_vidc_inst *inst, int id)
 
 	rc = v4l2_g_ctrl(&inst->ctrl_handler, &ctrl);
 	return rc ?: ctrl.value;
-}
-
-static inline bool is_non_realtime_session(struct msm_vidc_inst *inst)
-{
-	int rc = 0;
-	struct v4l2_control ctrl = {
-		.id = V4L2_CID_MPEG_VIDC_VIDEO_PRIORITY
-	};
-	rc = v4l2_g_ctrl(&inst->ctrl_handler, &ctrl);
-	return (!rc && ctrl.value);
 }
 
 enum multi_stream msm_comm_get_stream_output_mode(struct msm_vidc_inst *inst)
@@ -4118,6 +4110,12 @@ enum hal_extradata_id msm_comm_get_hal_extradata_index(
 		break;
 	case V4L2_MPEG_VIDC_EXTRADATA_CONTENT_LIGHT_LEVEL_SEI:
 		ret = HAL_EXTRADATA_CONTENT_LIGHT_LEVEL_SEI;
+		break;
+	case V4L2_MPEG_VIDC_EXTRADATA_VUI_DISPLAY:
+		ret = HAL_EXTRADATA_VUI_DISPLAY_INFO;
+		break;
+	case V4L2_MPEG_VIDC_EXTRADATA_VPX_COLORSPACE:
+		ret = HAL_EXTRADATA_VPX_COLORSPACE;
 		break;
 	default:
 		dprintk(VIDC_WARN, "Extradata not found: %d\n", index);
