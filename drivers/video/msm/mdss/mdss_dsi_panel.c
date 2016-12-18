@@ -33,6 +33,7 @@ DEFINE_MUTEX(LP_STOP_MODE_LOCK); /* For Hall ic panel reset funtion */
 
 #endif
 #include "mdss_dba_utils.h"
+
 #include "mdss_livedisplay.h"
 
 #define DT_CMD_HDR 6
@@ -666,6 +667,12 @@ static int mdss_dsi_set_col_page_addr(struct mdss_panel_data *pdata,
 			}
 		}
 	}
+
+#ifdef CONFIG_YULONG_COLOR
+	color_enhancement_impl_apply();
+#endif
+
+	mdss_livedisplay_update(ctrl, MODE_UPDATE_ALL);
 
 end:
 	return 0;
@@ -1938,6 +1945,8 @@ static int mdss_dsi_parse_panel_features(struct device_node *np,
 					__func__, __LINE__);
 	}
 
+	mdss_livedisplay_parse_dt(np, pinfo);
+
 	return 0;
 }
 
@@ -2412,8 +2421,6 @@ static int mdss_panel_parse_dt(struct device_node *np,
 
 	pinfo->is_dba_panel = of_property_read_bool(np,
 			"qcom,dba-panel");
-
-	mdss_livedisplay_parse_dt(np, pinfo);
 
 	return 0;
 

@@ -1629,10 +1629,6 @@ static int mdss_dsi_unblank(struct mdss_panel_data *pdata)
 	}
 
 	ctrl_pdata->ctrl_state |= CTRL_STATE_PANEL_INIT;
-
-	mdss_livedisplay_update(pdata->panel_info.livedisplay,
-			MODE_UPDATE_ALL);
-
 error:
 	mdss_dsi_clk_ctrl(ctrl_pdata, DSI_ALL_CLKS, 0);
 
