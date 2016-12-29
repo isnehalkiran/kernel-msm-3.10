@@ -750,6 +750,9 @@ static struct rcg_clk camss_gp0_clk_src = {
 };
 
 static struct clk_freq_tbl ftbl_camss_gp1_clk_src[] = {
+#ifdef CONFIG_MACH_SAMSUNG
+	F(  24000000, 	       gpll0,	 1,    3,   100),
+#endif
 	F( 100000000,          gpll0,    8,    0,     0),
 	F( 200000000,          gpll0,    4,    0,     0),
 	F( 266670000,          gpll0,    3,    0,     0),
@@ -772,7 +775,7 @@ static struct rcg_clk camss_gp1_clk_src = {
 };
 
 static struct clk_freq_tbl ftbl_jpeg0_clk_src[] = {
-	F( 133330000,          gpll0,    6,    0,     0),
+	F( 133333333,          gpll0,    6,    0,     0),
 	F( 200000000,          gpll0,    4,    0,     0),
 	F( 266666667,          gpll0,    3,    0,     0),
 	F( 300000000,      gpll4_out,    4,    0,     0),
@@ -1504,7 +1507,7 @@ static struct rcg_clk usb_fs_system_clk_src = {
 static struct clk_freq_tbl ftbl_usb_hs_system_clk_src[] = {
 	F(  57140000,          gpll0,   14,    0,     0),
 	F( 100000000,          gpll0,    8,    0,     0),
-	F( 133330000,          gpll0,    6,    0,     0),
+	F( 133333333,          gpll0,    6,    0,     0),
 	F( 177780000,          gpll0,  4.5,    0,     0),
 	F_END
 };
