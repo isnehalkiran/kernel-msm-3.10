@@ -517,7 +517,11 @@ EXPORT_SYMBOL(sensors_classdev_unregister);
 
 static int __init sensors_init(void)
 {
+#if !defined(CONFIG_MACH_SAMSUNG)
+	sensors_class = class_create(THIS_MODULE, "sensors1");
+#else
 	sensors_class = class_create(THIS_MODULE, "sensors");
+#endif
 	if (IS_ERR(sensors_class))
 		return PTR_ERR(sensors_class);
 	sensors_class->dev_attrs = sensors_class_attrs;

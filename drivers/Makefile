@@ -175,3 +175,5 @@ obj-$(CONFIG_SENSORS_SSC)	+= sensors/
 # FINGERPRINT
 obj-$(CONFIG_SENSORS_FINGERPRINT)	+= fingerprint/
 
+#Sensorhub
+obj-$(CONFIG_SENSORS_SSP)	+= sensorhub/
