@@ -27,8 +27,16 @@
 #include <linux/notifier.h>
 #include <linux/sysfs.h>
 
+#if defined(CONFIG_MUIC_SUPPORT_HMT_DETECTION)
+#define SUPPORTED_CABLE_MAX	29
+#else
 #define SUPPORTED_CABLE_MAX	32
+#endif
+#if defined(CONFIG_MACH_SAMSUNG)
+#define CABLE_NAME_MAX		SUPPORTED_CABLE_MAX
+#else
 #define CABLE_NAME_MAX		30
+#define EXTCON_DEV_NAME			"extcon-muic"
 
 /*
  * The standard cable name is to help support general notifier
@@ -51,6 +59,38 @@
 enum extcon_cable_name {
 	EXTCON_USB = 0,
 	EXTCON_USB_HOST,
+#if defined(CONFIG_MACH_SAMSUNG)
+	EXTCON_USB_HOST_5V,
+	EXTCON_TA, /* Travel Adaptor */
+	EXTCON_HV_TA,			/* High Voltage Charger(9V) */
+	EXTCON_CEA936_CHG,	/* CEA936 A/B USB cable, Only for charging. */
+	EXTCON_FAST_CHARGER,
+	EXTCON_SLOW_CHARGER,
+	EXTCON_CHARGE_DOWNSTREAM, /* Charging an external device */
+	EXTCON_MHL,
+	EXTCON_MHL_VB,
+	EXTCON_LINE_OUT,
+	EXTCON_DESKDOCK,
+	EXTCON_DESKDOCK_VB,
+	EXTCON_CARDOCK,
+	EXTCON_CARDOCK_VB,
+	EXTCON_AUDIODOCK,
+	EXTCON_SMARTDOCK,
+	EXTCON_SMARTDOCK_TA,
+	EXTCON_SMARTDOCK_USB,
+	EXTCON_JIG_UARTOFF,
+	EXTCON_JIG_UARTOFF_VB,
+	EXTCON_JIG_UARTON,
+	EXTCON_JIG_USBOFF,
+	EXTCON_JIG_USBON,
+	EXTCON_INCOMPATIBLE,
+	EXTCON_CHARGING_CABLE,
+#if defined(CONFIG_MUIC_SUPPORT_HMT_DETECTION)
+	EXTCON_HMT,
+#endif
+
+	EXTCON_NONE,
+#else
 	EXTCON_TA, /* Travel Adaptor */
 	EXTCON_FAST_CHARGER,
 	EXTCON_SLOW_CHARGER,
@@ -69,8 +109,13 @@ enum extcon_cable_name {
 	EXTCON_VIDEO_IN,
 	EXTCON_VIDEO_OUT,
 	EXTCON_MECHANICAL,
+#endif
 };
+#if defined(CONFIG_MACH_SAMSUNG)
+extern const char *extcon_cable_name[];
+#else
 extern const char extcon_cable_name[][CABLE_NAME_MAX + 1];
+#endif
 
 struct extcon_cable;
 
@@ -172,6 +217,19 @@ struct extcon_specific_cable_nb {
 	int cable_index;
 	struct extcon_dev *edev;
 	unsigned long previous_value;
+};
+
+enum extcon_chrgr_cbl_stat {
+	EXTCON_CHRGR_CABLE_CONNECTED,
+	EXTCON_CHRGR_CABLE_DISCONNECTED,
+	EXTCON_CHRGR_CABLE_SUSPENDED,
+	EXTCON_CHRGR_CABLE_RESUMED,
+	EXTCON_CHRGR_CABLE_UPDATED,
+};
+
+struct extcon_chrgr_cbl_props {
+	enum extcon_chrgr_cbl_stat cable_stat;
+	unsigned long mA;
 };
 
 #if IS_ENABLED(CONFIG_EXTCON)

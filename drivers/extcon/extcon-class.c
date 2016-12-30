@@ -601,6 +601,7 @@ static int create_extcon_class(void)
 		switch_class = class_compat_register("extcon-switch");
 #else
 		switch_class = class_compat_register("switch");
+#endif
 		if (WARN(!switch_class, "cannot allocate"))
 			return -ENOMEM;
 #endif /* CONFIG_ANDROID */
