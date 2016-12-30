@@ -41,6 +41,37 @@
  * every single port-type of the following cable names. Please choose cable
  * names that are actually used in your extcon device.
  */
+#if !defined(CONFIG_MACH_SAMSUNG)
+const char *extcon_cable_name[] = {
+	[EXTCON_USB] 	   = "USB",
+	[EXTCON_USB_HOST]   = "USB-Host",
+	[EXTCON_USB_HOST_5V]    = "USB-Host-5V",
+	[EXTCON_TA]	   = "TA",
+	[EXTCON_HV_TA]	   = "High Voltage TA",
+	[EXTCON_CEA936_CHG] = "CEA936",
+	[EXTCON_FAST_CHARGER]   = "Fast-charger",
+	[EXTCON_SLOW_CHARGER]   = "Slow-charger",
+	[EXTCON_CHARGE_DOWNSTREAM]  = "Charge-downstream",
+	[EXTCON_MHL] 	   = "MHL",
+	[EXTCON_MHL_VB]	   = "MHL-VB",
+	[EXTCON_LINE_OUT]   = "Line-out",
+	[EXTCON_DESKDOCK]   = "Desk-dock",
+	[EXTCON_DESKDOCK_VB]    = "Desk-dock-VB",
+	[EXTCON_CARDOCK]    = "Car-dock",
+	[EXTCON_CARDOCK_VB] = "Car-dock0-VB",
+	[EXTCON_AUDIODOCK]  = "Audio-dock",
+	[EXTCON_SMARTDOCK]  = "Smart-dock",
+	[EXTCON_SMARTDOCK_TA]   = "Smart-dock-TA",
+	[EXTCON_SMARTDOCK_USB]  = "Smart-dock-USB",
+	[EXTCON_JIG_UARTOFF]    = "JIG-UART-OFF",
+	[EXTCON_JIG_UARTOFF_VB] = "JIG-UART-OFF-VB",
+	[EXTCON_JIG_UARTON] = "JIG-UART-ON",
+	[EXTCON_JIG_USBOFF] = "JIG-USB-OFF",
+	[EXTCON_JIG_USBON]  = "JIG-USB-ON",
+	[EXTCON_INCOMPATIBLE]   = "Incompatible-TA",
+	[EXTCON_CHARGING_CABLE] = "Charging-Cable",
+};
+#else
 const char extcon_cable_name[][CABLE_NAME_MAX + 1] = {
 	[EXTCON_USB]		= "USB",
 	[EXTCON_USB_HOST]	= "USB-Host",
@@ -62,7 +93,13 @@ const char extcon_cable_name[][CABLE_NAME_MAX + 1] = {
 	[EXTCON_VIDEO_IN]	= "Video-in",
 	[EXTCON_VIDEO_OUT]	= "Video-out",
 	[EXTCON_MECHANICAL]	= "Mechanical",
+#if defined(CONFIG_MUIC_SUPPORT_HMT_DETECTION)
+	[EXTCON_HMT] 	   = "HMT",
+#endif
+	[EXTCON_NONE]	   = "None",
+	NULL,
 };
+#endif
 
 static struct class *extcon_class;
 #if defined(CONFIG_ANDROID)
@@ -560,6 +597,9 @@ static int create_extcon_class(void)
 		extcon_class->dev_attrs = extcon_attrs;
 
 #if defined(CONFIG_ANDROID)
+#if defined(CONFIG_MACH_SAMSUNG)
+		switch_class = class_compat_register("extcon-switch");
+#else
 		switch_class = class_compat_register("switch");
 		if (WARN(!switch_class, "cannot allocate"))
 			return -ENOMEM;
